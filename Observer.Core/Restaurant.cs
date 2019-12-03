@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Observer.Core.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Observer.Core
 {
-    public class Restaurant
+    public class Restaurant : IObserver
     {
         private readonly string _name;
         private readonly double _purchaseThreshold;
@@ -15,16 +16,15 @@ namespace Observer.Core
             _purchaseThreshold = purchaseThreshold;
         }
 
-        public void PriceHasChanged(Veggie veggie)
+        public void Update(IObservable observable)
         {
-            if(veggie.PricePerPound <= _purchaseThreshold)
+            Veggie veggie = (Veggie)observable;
+
+            if (veggie.PricePerPound <= _purchaseThreshold)
             {
                 Console.WriteLine($"{_name}: I'll by some Carrots to the price of {veggie.PricePerPound}");
             }
         }
-
-
-
 
     }
 }

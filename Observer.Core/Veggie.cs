@@ -1,23 +1,21 @@
-﻿using System;
+﻿using Observer.Core.Contracts;
+using System;
 using System.Collections.Generic;
 
 namespace Observer.Core
 {
-    public abstract class Veggie
+    public abstract class Veggie : IObservable
     {
         private double _pricePerPound;
 
-        private Restaurant _samsSteakhouse;
-        private Restaurant _iltheatro;
-        private Restaurant _kuernberghalle;
-        
+        private List<IObserver> _observers;
+
         public Veggie(double pricePerPound)
         {
             _pricePerPound = pricePerPound;
 
-            _samsSteakhouse = new Restaurant("Sam's Steakhouse", 0.5);
-            _iltheatro = new Restaurant("Il Theatro", 0.7);
-            _kuernberghalle = new Restaurant("Kürnberghalle", 0.4);
+            _observers = new List<IObserver>();
+         
         }
 
         public double PricePerPound
@@ -29,16 +27,35 @@ namespace Observer.Core
             set
             {
                 _pricePerPound = value;
-                PriceHasChanged();
-                
+                Notify();
+
             }
         }
 
-        private void PriceHasChanged()
+
+        public void Notify()
         {
-            _samsSteakhouse.PriceHasChanged(this);
-            _iltheatro.PriceHasChanged(this);
-            _kuernberghalle.PriceHasChanged(this);
+            foreach(IObserver observer in _observers)
+            {
+                observer.Update(this);
+            }
         }
+
+        public void Attach(IObserver observer)
+        {
+            if(!_observers.Contains(observer))
+            {
+                _observers.Add(observer);
+            }
+        }
+
+        public void Detach(IObserver observer)
+        {
+            if(_observers.Contains(observer))
+            {
+                _observers.Remove(observer);
+            }
+        }
+
     }
 }
