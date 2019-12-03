@@ -22,9 +22,5 @@ namespace Observer.Core
                 Console.WriteLine($"{_name}: I'll by some Carrots to the price of {veggie.PricePerPound}");
             }
         }
-
-
-
-
     }
 }
